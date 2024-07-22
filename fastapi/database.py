@@ -2,6 +2,7 @@ from beanie import init_beanie
 from motor.motor_asyncio import AsyncIOMotorClient
 
 from config import Settings
+from daily_event.model import DailyEvent
 
 async def init_db():
     db_settings = Settings().dict().get("MONGODB_SETTINGS")
@@ -27,4 +28,4 @@ async def init_db():
         db_settings["tlsCAFile"] = ssl_ca_certs
 
     client = AsyncIOMotorClient(**db_settings)
-    await init_beanie(database=client[db_name], document_models=[])
+    await init_beanie(database=client[db_name], document_models=[DailyEvent])
