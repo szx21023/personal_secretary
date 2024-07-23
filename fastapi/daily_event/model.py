@@ -8,11 +8,12 @@ from utils import InternalBaseDocument
 class DailyEvent(InternalBaseDocument):
     event_name: str
     event_type: str
-    estimated_start_time: datetime
-    estimated_end_time: datetime
+    status: str
 
     description: Optional[str] = Field(None) # before daily_event
     note: Optional[str] = Field(None) # after daily_event
+    estimated_start_time: Optional[datetime] = Field(None)
+    estimated_end_time: Optional[datetime] = Field(None)
     start_time: Optional[datetime] = Field(None)
     end_time: Optional[datetime] = Field(None)
     cancel_time: Optional[datetime] = Field(None)
