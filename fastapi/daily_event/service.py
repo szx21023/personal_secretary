@@ -13,3 +13,8 @@ class DailyEventService:
         }
         daily_event = DailyEvent(**data)
         await daily_event.save()
+
+    @staticmethod
+    async def get_daily_event():
+        daily_events = await DailyEvent.find().to_list()
+        return daily_events
