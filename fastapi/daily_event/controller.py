@@ -18,12 +18,10 @@ async def create_daily_event(schema = Body(example={
     post daily_event api
     """
 
-    event_name = schema.get('event_name')
-    event_type = schema.get('event_type')
-    estimated_start_time = schema.get('estimated_start_time')
-    estimated_end_time = schema.get('estimated_end_time')
+    event_name = schema.pop('event_name')
+    event_type = schema.pop('event_type')
 
-    daily_events = await DailyEventService.create_daily_event(event_name, event_type, estimated_start_time, estimated_end_time)
+    daily_events = await DailyEventService.create_daily_event(event_name, event_type, **schema)
     return return_response(daily_events)
 
 @router.get("")
