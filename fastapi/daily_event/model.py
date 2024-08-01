@@ -20,6 +20,3 @@ class DailyEvent(InternalBaseDocument):
 
     class Settings:
         name = "daily_event"
-
-    class Index:
-        event_name_index = [("event_name", 1)]
