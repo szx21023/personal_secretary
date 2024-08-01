@@ -24,4 +24,8 @@ class Settings(BaseSettings):
     AWS_REGION: str = ''
     AWS_LOGGROUP_NAME: str = ''
 
+    # line config
+    LINE_CHANNEL_ACCESS_TOKEN: str = ''
+    LINE_CHANNEL_SECRET: str = ''
+
     model_config = SettingsConfigDict(env_file=".env")
