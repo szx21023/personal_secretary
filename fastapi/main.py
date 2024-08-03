@@ -9,6 +9,7 @@ import traceback
 
 from aws import init_app as init_aws_app
 from daily_event import init_app as init_daily_event_app
+from line import init_app as init_line_app
 from config import Settings
 from database import init_db
 from version import version
@@ -74,6 +75,7 @@ app = PSFactory().create_app()
 async def start_db():
     await init_db()
     init_daily_event_app(app)
+    init_line_app(app)
 
 @app.get("/hello")
 def read_root():
