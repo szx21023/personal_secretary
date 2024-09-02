@@ -2,6 +2,7 @@ from main import app
 
 from .const import DailyEventStatus, DailyEventType
 from .model import DailyEvent
+from .schema import DailyEventSchema
 
 class DailyEventService:
     @staticmethod
@@ -32,6 +33,10 @@ class DailyEventService:
         })
         daily_event = DailyEvent(**kargs)
         await daily_event.save()
+
+        schema = DailyEventSchema()
+        daily_event = schema.dump(daily_event)
+        return daily_event
 
     @staticmethod
     async def get_daily_event():
