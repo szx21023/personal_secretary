@@ -1,7 +1,8 @@
 from main import app
 
-from .const import DailyEventStatus
+from .const import DailyEventStatus, DailyEventType
 from .model import DailyEvent
+from .schema import DailyEventSchema
 
 class DailyEventService:
     @staticmethod
@@ -9,6 +10,12 @@ class DailyEventService:
         # if nether (both columns exist) nor (both columns not exist), raise error
         if not ((kargs.get('estimated_start_time') and kargs.get('estimated_end_time')) or \
         (not kargs.get('estimated_start_time') and not kargs.get('estimated_end_time'))):
+            return
+
+        if not event_name:
+            return
+
+        if event_type not in [member.value for _, member in DailyEventType.__members__.items()]:
             return
 
         if 'start_time' in kargs:
@@ -26,6 +33,10 @@ class DailyEventService:
         })
         daily_event = DailyEvent(**kargs)
         await daily_event.save()
+
+        schema = DailyEventSchema()
+        daily_event = schema.dump(daily_event)
+        return daily_event
 
     @staticmethod
     async def get_daily_event():
