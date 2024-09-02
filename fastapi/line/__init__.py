@@ -14,4 +14,6 @@ def init_app(app):
 
     @app.state.line_handler.add(MessageEvent, message=TextMessage)
     def handle_message(event: MessageEvent):
+        message = f'line_event: {event}'
+        app.logger.info(message)
         asyncio.create_task(LineService.handle_message(event))
