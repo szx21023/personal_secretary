@@ -1,6 +1,6 @@
 from main import app
 
-from .const import DailyEventStatus
+from .const import DailyEventStatus, DailyEventType
 from .model import DailyEvent
 
 class DailyEventService:
@@ -9,6 +9,12 @@ class DailyEventService:
         # if nether (both columns exist) nor (both columns not exist), raise error
         if not ((kargs.get('estimated_start_time') and kargs.get('estimated_end_time')) or \
         (not kargs.get('estimated_start_time') and not kargs.get('estimated_end_time'))):
+            return
+
+        if not event_name:
+            return
+
+        if event_type not in [member.value for _, member in DailyEventType.__members__.items()]:
             return
 
         if 'start_time' in kargs:

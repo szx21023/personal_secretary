@@ -1,3 +1,5 @@
+from enum import Enum
+
 class DailyEventStatus:
     '''
     閒置中：尚無預計執行時間
@@ -11,3 +13,15 @@ class DailyEventStatus:
     STARTED = "started"
     OVERTIME = "overtime"
     FINISHED = "finished"
+
+class DailyEventType(Enum):
+    '''
+    學習
+    玩樂
+    工作
+    運動
+    '''
+    LEARN = "learn"
+    PLAY = "play"
+    WORK = "work"
+    EXERCISE = "exercise"
