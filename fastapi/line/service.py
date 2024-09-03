@@ -2,6 +2,9 @@ from linebot.models import MessageEvent, TextMessage
 
 from main import app
 from daily_event.service import DailyEventService
+from daily_event.schema import DailyEventSchema
+
+from .template import GetDailyTemplate
 
 class LineService:
     @staticmethod
@@ -27,5 +30,17 @@ class LineService:
 
     @staticmethod
     async def get_daily_event(event):
-        daily_events = await DailyEventService.get_daily_event(event)
+        daily_events = await DailyEventService.get_daily_event()
+        schema = DailyEventSchema(many=True)
+        daily_events = schema.dump(daily_events)
+
+        message_list = []
+        for daily_event in daily_events:
+            template = GetDailyTemplate(**daily_event)
+            message_list.append(template.message)
+
+        app.state.line_bot_api.reply_message(
+            event.reply_token,
+            TextMessage(text='\n'.join(message_list))
+        )
         return daily_events
