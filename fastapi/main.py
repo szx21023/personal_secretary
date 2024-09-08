@@ -70,7 +70,7 @@ class PSFactory:
 
         @app.middleware("http")
         async def handle_request_headers(request: Request, call_next):
-            app.logger.info(f"request.headers: {request.headers}")
+            app.logger.info(f"request.url: {request.url}, method: {request.method}, headers: {request.headers}")
             response = await call_next(request)
             response_body = [section async for section in response.body_iterator]
             response.body_iterator = iterate_in_threadpool(iter(response_body))
