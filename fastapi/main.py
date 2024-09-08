@@ -3,6 +3,7 @@ import watchtower
 from fastapi import FastAPI, HTTPException, status, Request
 from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
+from starlette.concurrency import iterate_in_threadpool
 
 import logging
 import traceback
@@ -71,6 +72,9 @@ class PSFactory:
         async def handle_request_headers(request: Request, call_next):
             app.logger.info(f"request.headers: {request.headers}")
             response = await call_next(request)
+            response_body = [section async for section in response.body_iterator]
+            response.body_iterator = iterate_in_threadpool(iter(response_body))
+            app.logger.info(f"response_body: {response_body[0].decode()}")
             return response
 
         return app
