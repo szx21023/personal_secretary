@@ -67,6 +67,12 @@ class PSFactory:
                 }
             )
 
+        @app.middleware("http")
+        async def handle_request_headers(request: Request, call_next):
+            app.logger.info(f"request.headers: {request.headers}")
+            response = await call_next(request)
+            return response
+
         return app
 
 app = PSFactory().create_app()
