@@ -29,5 +29,16 @@ services:
     command: /bin/bash -c "envsubst < /etc/nginx/nginx.conf.template > /etc/nginx/nginx.conf && nginx -g 'daemon off;'"
     restart: always
 
+  mongodb:
+    image: mongo:6.0  # 使用 MongoDB 官方映像，版本 6.0
+    container_name: mongodb_container
+    ports:
+      - "27017:27017"  # 將主機的 27017 端口映射到容器內部的 27017 端口
+    networks:
+        - mynet
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root  # 設置管理員用戶名
+      MONGO_INITDB_ROOT_PASSWORD: example  # 設置管理員密碼
+
 networks:
   mynet:
