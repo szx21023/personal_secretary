@@ -30,15 +30,15 @@ services:
     restart: always
 
   mongodb:
-    image: mongo:6.0  # 使用 MongoDB 官方映像，版本 6.0
-    container_name: mongodb_container
+    image: mongo:6.0
+    container_name: ${DOCKER_MONGODB_NAME}
     ports:
-      - "27017:27017"  # 將主機的 27017 端口映射到容器內部的 27017 端口
+      - "${DOCKER_MONGODB_PORT}:27017"
     networks:
         - mynet
     environment:
-      MONGO_INITDB_ROOT_USERNAME: root  # 設置管理員用戶名
-      MONGO_INITDB_ROOT_PASSWORD: example  # 設置管理員密碼
+      MONGO_INITDB_ROOT_USERNAME: ${DOCKER_MONGO_INITDB_ROOT_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${DOCKER_MONGO_INITDB_ROOT_PASSWORD}
 
 networks:
   mynet:

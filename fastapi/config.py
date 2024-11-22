@@ -3,7 +3,7 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 class Settings(BaseSettings):
     # db config
     MONGODB_SETTINGS: dict = {
-        "host": "mongodb_container",
+        "host": "ps-mongodb",
         "port": 27017,
         "db_name": "personal_sercretary",
         "username": "root",
