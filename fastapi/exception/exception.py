@@ -19,7 +19,7 @@ class EstimatedTimeWrongValueException(InternalBaseException):
         _message = message or self.message
         super().__init__(status.HTTP_403_FORBIDDEN, self.code, _message, **kwargs)
 
-class EventNamenNotExistException(InternalBaseException):
+class EventNameNotExistException(InternalBaseException):
     code = "event_name_not_exist"
     message = "Event_name does not exist"
 

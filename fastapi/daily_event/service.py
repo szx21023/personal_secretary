@@ -1,5 +1,5 @@
 from main import app
-from exception.exception import EstimatedTimeWrongValueException, EventNamenNotExistException, EventTypeIllegalException
+from exception.exception import EstimatedTimeWrongValueException, EventNameNotExistException, EventTypeIllegalException
 
 from .const import DailyEventStatus, DailyEventType
 from .model import DailyEvent
@@ -16,7 +16,7 @@ class DailyEventService:
             raise exception
 
         if not event_name:
-            exception = EventNamenNotExistException()
+            exception = EventNameNotExistException()
             app.logger.warning(exception.message)
             raise exception
 
