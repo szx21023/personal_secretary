@@ -15,17 +15,17 @@ services:
   nginx:
     container_name: ${DOCKER_NGINX_NAME}
     build:
-        context: ./nginx
-        dockerfile: dockerfile
+      context: ./nginx
+      dockerfile: dockerfile
     ports:
-        - ${DOCKER_NGINX_PORT}:80
+      - ${DOCKER_NGINX_PORT}:80
     depends_on:
-        - fastapi
+      - fastapi
     networks:
-        - mynet
+      - mynet
     environment:
-        SERVER_NAME: ${DOCKER_SERVER_NAME}
-        SERVER_PORT: 8000
+      SERVER_NAME: ${DOCKER_SERVER_NAME}
+      SERVER_PORT: 8000
     command: /bin/bash -c "envsubst < /etc/nginx/nginx.conf.template > /etc/nginx/nginx.conf && nginx -g 'daemon off;'"
     restart: always
 
@@ -35,7 +35,7 @@ services:
     ports:
       - "${DOCKER_MONGODB_PORT}:27017"
     networks:
-        - mynet
+      - mynet
     environment:
       MONGO_INITDB_ROOT_USERNAME: ${DOCKER_MONGO_INITDB_ROOT_USERNAME}
       MONGO_INITDB_ROOT_PASSWORD: ${DOCKER_MONGO_INITDB_ROOT_PASSWORD}
