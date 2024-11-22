@@ -1,4 +1,5 @@
 from main import app
+from exception.exception import EstimatedTimeWrongValueException, EventNameNotExistException, EventTypeIllegalException
 
 from .const import DailyEventStatus, DailyEventType
 from .model import DailyEvent
@@ -10,13 +11,19 @@ class DailyEventService:
         # if nether (both columns exist) nor (both columns not exist), raise error
         if not ((kargs.get('estimated_start_time') and kargs.get('estimated_end_time')) or \
         (not kargs.get('estimated_start_time') and not kargs.get('estimated_end_time'))):
-            return
+            exception = EstimatedTimeWrongValueException()
+            app.logger.warning(exception.message)
+            raise exception
 
         if not event_name:
-            return
+            exception = EventNameNotExistException()
+            app.logger.warning(exception.message)
+            raise exception
 
         if event_type not in [member.value for _, member in DailyEventType.__members__.items()]:
-            return
+            exception = EventTypeIllegalException()
+            app.logger.warning(exception.message)
+            raise exception
 
         if 'start_time' in kargs:
             kargs['status'] = DailyEventStatus.STARTED
