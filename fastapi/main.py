@@ -1,3 +1,5 @@
+import dotenv
+import os
 import watchtower
 
 from fastapi import FastAPI, HTTPException, status, Request
@@ -14,10 +16,15 @@ from line import init_app as init_line_app
 from config import Settings
 from database import init_db
 from version import version
+from utils import update_dict_with_cast
 
 class PSFactory:
     logger_name = 'my_log'
     log_formatter = logging.Formatter('%(asctime)s %(filename)s %(levelname)s: %(message)s')
+
+    def __load_local_config(self, app):
+        dotenv.load_dotenv(override=True)
+        update_dict_with_cast(app.state.config, os.environ)
 
     def __setup_main_logger(self, app, logger_name=logger_name, level=logging.DEBUG):
         logger = self.__setup_logger(app, logger_name, level)
@@ -45,6 +52,8 @@ class PSFactory:
         settings = Settings().dict()
         app = FastAPI(docs_url=settings.get('DOCS_URL'), redoc_url=settings.get('REDOC_URL'), openapi_url=settings.get('OPENAPI_URL'))
         app.state.config = settings
+        self.__load_local_config(app)
+
         app.state.aws_session = init_aws_app(app)
         app.add_middleware(
             CORSMiddleware,
