@@ -50,6 +50,7 @@ services:
     environment:
       MONGO_INITDB_ROOT_USERNAME: ${DOCKER_MONGO_INITDB_ROOT_USERNAME}
       MONGO_INITDB_ROOT_PASSWORD: ${DOCKER_MONGO_INITDB_ROOT_PASSWORD}
+    restart: always
 
 networks:
   mynet:
