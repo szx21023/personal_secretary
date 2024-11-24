@@ -63,7 +63,6 @@ class PSFactory:
             allow_headers=['*'],
         )
         self.__setup_main_logger(app, self.logger_name)
-        self.__setup_logger(app, self.logger_name)
         self.__setup_cloud_log(app)
 
         @app.exception_handler(HTTPException)
