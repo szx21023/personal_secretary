@@ -25,7 +25,7 @@ class Settings(BaseSettings):
     AWS_LOGGROUP_NAME: str = ''
 
     # line config
-    LINE_CHANNEL_ACCESS_TOKEN: str = 'VVsvv/tgNZq7y4hM8+Ggd2/+cdR21TdeMglwAIiPAhlNjyx+M+uEQlRQ5ZFJE8bMInrpSqJSI3Bg2p+RIO5wGlqnhLZ2pw+jVZaxe0AZU5uZqfZbCczYYYZtIiuO8M9MxmR8sG6m1Psl6yiCmoiTrQdB04t89/1O/w1cDnyilFU='
-    LINE_CHANNEL_SECRET: str = '260ca420b318a7cb3838ddf2fd56217d'
+    LINE_CHANNEL_ACCESS_TOKEN: str = ''
+    LINE_CHANNEL_SECRET: str = ''
 
     model_config = SettingsConfigDict(env_file=".env")
