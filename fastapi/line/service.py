@@ -1,3 +1,4 @@
+from datetime import datetime
 from linebot.models import MessageEvent, TextMessage
 
 from main import app
@@ -26,7 +27,9 @@ class LineService:
     async def create_daily_event(event):
         text = event.message.text.replace('建立', '')
         event_name, event_type, estimated_start_time, estimated_end_time = text.split(' ')
-        {}
+
+        estimated_start_time = datetime.strptime(estimated_start_time, "%Y%m%d%H%M")
+        estimated_end_time = datetime.strptime(estimated_end_time, "%Y%m%d%H%M")
         daily_event = await DailyEventService.create_daily_event(event_name, event_type, estimated_start_time=estimated_start_time, estimated_end_time=estimated_end_time)
         return daily_event
 
