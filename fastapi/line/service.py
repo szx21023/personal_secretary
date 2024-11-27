@@ -25,8 +25,9 @@ class LineService:
     @staticmethod
     async def create_daily_event(event):
         text = event.message.text.replace('建立', '')
-        event_name, event_type = text.split(' ')
-        daily_event = await DailyEventService.create_daily_event(event_name, event_type)
+        event_name, event_type, estimated_start_time, estimated_end_time = text.split(' ')
+        {}
+        daily_event = await DailyEventService.create_daily_event(event_name, event_type, estimated_start_time=estimated_start_time, estimated_end_time=estimated_end_time)
         return daily_event
 
     @staticmethod
