@@ -1,0 +1,1 @@
+DEFAULT_NO_DAILY_EVENT_MESSAGE = 'there is no daily event'

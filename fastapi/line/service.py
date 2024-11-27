@@ -4,6 +4,7 @@ from main import app
 from daily_event.service import DailyEventService
 from daily_event.schema import DailyEventSchema
 
+from .const import DEFAULT_NO_DAILY_EVENT_MESSAGE
 from .template import GetDailyTemplate
 
 class LineService:
@@ -38,9 +39,10 @@ class LineService:
         for daily_event in daily_events:
             template = GetDailyTemplate(**daily_event)
             message_list.append(template.message)
+        message = '\n'.join(message_list) if message_list else DEFAULT_NO_DAILY_EVENT_MESSAGE
 
         app.state.line_bot_api.reply_message(
             event.reply_token,
-            TextMessage(text='\n'.join(message_list))
+            TextMessage(text=message)
         )
         return daily_events
