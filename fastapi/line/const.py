@@ -1,1 +1,3 @@
 DEFAULT_NO_DAILY_EVENT_MESSAGE = 'there is no daily event'
+
+DATETIME_NO_PUNCTUATION = "%Y%m%d%H%M"
