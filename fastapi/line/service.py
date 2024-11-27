@@ -1,7 +1,8 @@
 from datetime import datetime
-from linebot.models import MessageEvent, TextMessage
+from linebot.models import TextMessage
 
 from main import app
+from daily_event.const import DailyEventType
 from daily_event.service import DailyEventService
 from daily_event.schema import DailyEventSchema
 
@@ -16,6 +17,9 @@ class LineService:
 
         elif '查看' in event.message.text:
             result = await LineService.get_daily_event(event)
+
+        elif '說明' in event.message.text:
+            result = await LineService.get_explaination(event)
 
         else:
             app.state.line_bot_api.reply_message(
@@ -50,3 +54,14 @@ class LineService:
             TextMessage(text=message)
         )
         return daily_events
+
+    @staticmethod
+    async def get_explaination(event):
+        message = 'daily_event 格式範例： name, event_type, estimated_start_time, estimated_end_time\n'
+        message += 'event_type: ' + ', '.join([member.value for _, member in DailyEventType.__members__.items()])
+
+        app.state.line_bot_api.reply_message(
+            event.reply_token,
+            TextMessage(text=message)
+        )
+        return
