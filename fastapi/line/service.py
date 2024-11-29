@@ -35,10 +35,7 @@ class LineService:
         daily_event = await DailyEventService.create_daily_event(event_name, event_type, estimated_start_time=estimated_start_time, estimated_end_time=estimated_end_time)
 
         message = '建立成功'
-        app.state.line_bot_api.reply_message(
-            event.reply_token,
-            TextMessage(text=message)
-        )
+        LineService.reply_message(event, message)
         return daily_event
 
     @staticmethod
