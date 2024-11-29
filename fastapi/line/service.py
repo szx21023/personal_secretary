@@ -1,4 +1,5 @@
 from datetime import datetime
+from linebot.exceptions import LineBotApiError
 from linebot.models import TextMessage
 
 from main import app
@@ -22,10 +23,7 @@ class LineService:
             result = await LineService.get_explaination(event)
 
         else:
-            app.state.line_bot_api.reply_message(
-                event.reply_token,
-                TextMessage(text=event.message.text)
-            )
+            LineService.reply_message(event, event.message.text)
 
     @staticmethod
     async def create_daily_event(event):
@@ -53,21 +51,26 @@ class LineService:
         for daily_event in daily_events:
             template = GetDailyTemplate(**daily_event)
             message_list.append(template.message)
-        message = '\n'.join(message_list) if message_list else DEFAULT_NO_DAILY_EVENT_MESSAGE
 
-        app.state.line_bot_api.reply_message(
-            event.reply_token,
-            TextMessage(text=message)
-        )
+        message = '\n'.join(message_list) if message_list else DEFAULT_NO_DAILY_EVENT_MESSAGE
+        LineService.reply_message(event, message)
         return daily_events
 
     @staticmethod
     async def get_explaination(event):
         message = 'daily_event 格式範例： name, event_type, estimated_start_time, estimated_end_time\n'
         message += 'event_type: ' + ', '.join([member.value for _, member in DailyEventType.__members__.items()])
+        LineService.reply_message(event, message)
+        return
 
-        app.state.line_bot_api.reply_message(
-            event.reply_token,
-            TextMessage(text=message)
-        )
+    @staticmethod
+    async def reply_message(event, message):
+        try:
+            app.state.line_bot_api.reply_message(
+                event.reply_token,
+                TextMessage(text=message)
+            )
+        except LineBotApiError as err:
+            app.logger.warning(str(err))
+
         return
