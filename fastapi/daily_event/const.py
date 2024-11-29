@@ -20,8 +20,10 @@ class DailyEventType(Enum):
     玩樂
     工作
     運動
+    其它
     '''
     LEARN = "learn"
     PLAY = "play"
     WORK = "work"
     EXERCISE = "exercise"
+    OTHER = "other"
