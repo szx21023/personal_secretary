@@ -23,7 +23,7 @@ class LineService:
             result = await LineService.get_explaination(event)
 
         else:
-            LineService.reply_message(event, event.message.text)
+            await LineService.reply_message(event, event.message.text)
 
     @staticmethod
     async def create_daily_event(event):
@@ -35,7 +35,7 @@ class LineService:
         daily_event = await DailyEventService.create_daily_event(event_name, event_type, estimated_start_time=estimated_start_time, estimated_end_time=estimated_end_time)
 
         message = '建立成功'
-        LineService.reply_message(event, message)
+        await LineService.reply_message(event, message)
         return daily_event
 
     @staticmethod
@@ -50,14 +50,14 @@ class LineService:
             message_list.append(template.message)
 
         message = '\n'.join(message_list) if message_list else DEFAULT_NO_DAILY_EVENT_MESSAGE
-        LineService.reply_message(event, message)
+        await LineService.reply_message(event, message)
         return daily_events
 
     @staticmethod
     async def get_explaination(event):
         message = 'daily_event 格式範例： name, event_type, estimated_start_time, estimated_end_time\n'
         message += 'event_type: ' + ', '.join([member.value for _, member in DailyEventType.__members__.items()])
-        LineService.reply_message(event, message)
+        await LineService.reply_message(event, message)
         return
 
     @staticmethod
