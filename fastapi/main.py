@@ -11,6 +11,7 @@ import logging
 import traceback
 
 from aws import init_app as init_aws_app
+from customer import init_app as init_customer_app
 from daily_event import init_app as init_daily_event_app
 from line import init_app as init_line_app
 from config import Settings
@@ -94,6 +95,7 @@ app = PSFactory().create_app()
 @app.on_event("startup")
 async def start_db():
     await init_db()
+    init_customer_app(app)
     init_daily_event_app(app)
     init_line_app(app)
 
