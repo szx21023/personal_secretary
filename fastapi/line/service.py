@@ -3,6 +3,7 @@ from linebot.exceptions import LineBotApiError
 from linebot.models import TextMessage
 
 from main import app
+from customer.service import CustomerService
 from daily_event.const import DailyEventType
 from daily_event.service import DailyEventService
 from daily_event.schema import DailyEventSchema
@@ -13,6 +14,10 @@ from .template import GetDailyTemplate
 class LineService:
     @staticmethod
     async def handle_message(event):
+        params = {'line_uid': event.source.user_id}
+        if not (_ := await CustomerService.get_by_line_uid(**params)):
+            await CustomerService.create_customer(params)
+
         if '建立' in event.message.text:
             result = await LineService.create_daily_event(event)
 
