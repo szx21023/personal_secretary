@@ -35,4 +35,10 @@ class EventTypeIllegalException(InternalBaseException):
         _message = message or self.message
         super().__init__(status.HTTP_403_FORBIDDEN, self.code, _message, **kwargs)
 
+class CustomerNotExistException(InternalBaseException):
+    code = "customer_not_exist"
+    message = "customer not exist"
 
+    def __init__(self, message: str = None, **kwargs):
+        _message = message or self.message
+        super().__init__(status.HTTP_404_NOT_FOUND, self.code, _message, **kwargs)

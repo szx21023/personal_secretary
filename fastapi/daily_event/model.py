@@ -6,6 +6,7 @@ from pydantic import Field
 from utils import InternalBaseDocument
 
 class DailyEvent(InternalBaseDocument):
+    customer_id: str
     event_name: str
     event_type: str
     status: str

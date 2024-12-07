@@ -5,9 +5,13 @@ from .const import DailyEventStatus, DailyEventType
 from .model import DailyEvent
 from .schema import DailyEventSchema
 
+from customer.service import CustomerService
+
 class DailyEventService:
     @staticmethod
-    async def create_daily_event(event_name, event_type, **kargs):
+    async def create_daily_event(customer_id, event_name, event_type, **kargs):
+        customer = await CustomerService.get_customer_by_id(customer_id)
+
         # if nether (both columns exist) nor (both columns not exist), raise error
         if not ((kargs.get('estimated_start_time') and kargs.get('estimated_end_time')) or \
         (not kargs.get('estimated_start_time') and not kargs.get('estimated_end_time'))):
@@ -35,6 +39,7 @@ class DailyEventService:
             kargs['status'] = DailyEventStatus.IDLE
 
         kargs.update({
+            'customer_id': customer_id,
             'event_name': event_name,
             'event_type': event_type
         })

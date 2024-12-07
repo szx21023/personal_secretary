@@ -2,6 +2,7 @@
 from marshmallow import fields, Schema
 
 class DailyEventSchema(Schema):
+    customer_id = fields.String()
     event_name = fields.String()
     event_type = fields.String()
     status = fields.String()
