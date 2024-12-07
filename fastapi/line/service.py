@@ -15,11 +15,11 @@ class LineService:
     @staticmethod
     async def handle_message(event):
         params = {'line_uid': event.source.user_id}
-        if not (_ := await CustomerService.get_by_line_uid(**params)):
-            await CustomerService.create_customer(params)
+        if not (customer := await CustomerService.get_by_line_uid(**params)):
+            customer = await CustomerService.create_customer(params)
 
         if '建立' in event.message.text:
-            result = await LineService.create_daily_event(event)
+            result = await LineService.create_daily_event(customer, event)
 
         elif '查看' in event.message.text:
             result = await LineService.get_daily_event(event)
@@ -31,13 +31,13 @@ class LineService:
             await LineService.reply_message(event, event.message.text)
 
     @staticmethod
-    async def create_daily_event(event):
+    async def create_daily_event(customer, event):
         text = event.message.text.replace('建立', '')
         event_name, event_type, estimated_start_time, estimated_end_time = text.split(' ')
 
         estimated_start_time = datetime.strptime(estimated_start_time, DATETIME_NO_PUNCTUATION)
         estimated_end_time = datetime.strptime(estimated_end_time, DATETIME_NO_PUNCTUATION)
-        daily_event = await DailyEventService.create_daily_event(event_name, event_type, estimated_start_time=estimated_start_time, estimated_end_time=estimated_end_time)
+        daily_event = await DailyEventService.create_daily_event(str(customer.id), event_name, event_type, estimated_start_time=estimated_start_time, estimated_end_time=estimated_end_time)
 
         message = '建立成功'
         await LineService.reply_message(event, message)
