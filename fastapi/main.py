@@ -103,17 +103,8 @@ async def start_db():
 
 @app.get("/hello")
 def read_root():
-    from datetime import datetime, timedelta
-    run_date = datetime.now() + timedelta(minutes=2)
-    job_id = f'{run_date}'
-    print(job_id)
-    job = app.scheduler.add_job(job_reservation_cancel, 'date', run_date=run_date, id=job_id, args=[str(job_id)])
     return {
         'data': {
             'version': version
         }
     }
-
-async def job_reservation_cancel(test_string):
-    print(test_string)
-    print('hello!!!!')
