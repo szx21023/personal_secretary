@@ -1,6 +1,6 @@
 from datetime import datetime
 from linebot.exceptions import LineBotApiError
-from linebot.models import TextMessage
+from linebot.models import TextMessage, TextSendMessage
 
 from main import app
 from customer.service import CustomerService
@@ -76,3 +76,13 @@ class LineService:
             app.logger.warning(str(err))
 
         return
+
+    @staticmethod
+    def push_message(line_uid: str, text: str):
+        try:
+            app.line_bot_api.push_message(line_uid, TextSendMessage(text=text))
+            message = f"Send line message successful, line_uid: {line_uid}, text: {text}"
+            app.logger.info(message)
+        except:
+            message = f"Send line message fail, line_uid: {line_uid}, text: {text}"
+            app.logger.warning(message)
