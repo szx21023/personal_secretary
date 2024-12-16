@@ -3,6 +3,7 @@ from datetime import datetime
 
 from beanie import Document
 from pydantic import Field
+from pytz import timezone
 
 class InternalBaseDocument(Document):
     create_time: datetime = Field(default_factory=datetime.utcnow)
@@ -32,3 +33,6 @@ def update_dict_with_cast(curr_conf: dict, new_conf: dict):
             key_type = type(curr_conf[key])
             cast_func = key_type if key_type in (str, int) else json.loads
             curr_conf[key] = cast_func(new_conf[key])
+
+def system_tz(sys_tz='UTC'):
+    return timezone(sys_tz)

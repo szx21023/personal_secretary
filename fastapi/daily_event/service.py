@@ -6,6 +6,7 @@ from .model import DailyEvent
 from .schema import DailyEventSchema
 
 from customer.service import CustomerService
+from utils import system_tz
 
 class DailyEventService:
     @staticmethod
@@ -46,6 +47,7 @@ class DailyEventService:
         daily_event = DailyEvent(**kargs)
         await daily_event.save()
 
+        await DailyEventService.setup_schedule_remind(daily_event)
         schema = DailyEventSchema()
         daily_event = schema.dump(daily_event)
         return daily_event
@@ -54,3 +56,14 @@ class DailyEventService:
     async def get_daily_event():
         daily_events = await DailyEvent.find().sort("-create_time").to_list()
         return daily_events
+
+    @staticmethod
+    async def setup_schedule_remind(daily_event):
+        from line.service import LineService
+
+        if daily_event.status == DailyEventStatus.WAITING:
+            job_id = f'job_remind_coming_daily_event_{str(daily_event.id)}'
+            run_date = daily_event.estimated_start_time.replace(tzinfo=system_tz())
+            job = app.scheduler.add_job(LineService.remind_coming_daily_event, 'date', run_date=run_date, id=job_id, args=[daily_event])
+            message = f"setup job_remind_coming_daily_event, job_id: {job_id}, run_date: {run_date}"
+            app.logger.info(message)
