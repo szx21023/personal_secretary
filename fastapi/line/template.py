@@ -1,6 +1,6 @@
 class BaseTemplate:
     def __init__(self, event_name=None, event_type=None, status=None, description=None, note=None, estimated_start_time=None, \
-            estimated_end_time=None, start_time=None, end_time=None, cancel_time=None):
+            estimated_end_time=None, start_time=None, end_time=None, cancel_time=None, **kwargs):
 
         self.event_name = event_name
         self.event_type = event_type
