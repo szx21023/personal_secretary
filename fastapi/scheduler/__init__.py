@@ -17,6 +17,10 @@ async def init_app(app):
         url = f"mongodb://{db_user}:{db_pass}@{db_host}:{db_port}/{db_name}?retryWrites=false&authSource={db_name}"
         client = MongoClient(url, tls=True, tlsAllowInvalidHostnames=True, tlsCAFile=db_cert)
 
+    elif db_user and db_pass:
+        url = f"mongodb://{db_user}:{db_pass}@{db_host}:{db_port}"
+        client = MongoClient(url)
+
     else:
         url = f"mongodb://{db_host}:{db_port}"
         client = MongoClient(url)
