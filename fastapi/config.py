@@ -29,6 +29,6 @@ class Settings(BaseSettings):
     LINE_CHANNEL_SECRET: str = ''
 
     # cron config
-    CRON_DAILY_EVENT_EVERYDAY_REMINDING: str = '* * * * *'
+    CRON_DAILY_EVENT_EVERYDAY_REMINDING: str = '00 06 * * *'
 
     model_config = SettingsConfigDict(env_file=".env")
