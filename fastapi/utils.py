@@ -36,3 +36,13 @@ def update_dict_with_cast(curr_conf: dict, new_conf: dict):
 
 def system_tz(sys_tz='UTC'):
     return timezone(sys_tz)
+
+def get_local_now_time(local_tz='Asia/Taipei'):
+    return datetime.now(timezone(local_tz))
+
+def get_local_today_time(local_tz='Asia/Taipei'):
+    return get_local_now_time(local_tz).replace(hour=0, minute=0, second=0, microsecond=0)
+
+def get_local_today_time_to_utc(local_tz='Asia/Taipei'):
+    local_date = get_local_today_time(local_tz)
+    return local_date.astimezone(system_tz())

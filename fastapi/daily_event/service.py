@@ -1,3 +1,5 @@
+from datetime import timedelta
+
 from main import app
 from exception.exception import EstimatedTimeWrongValueException, EventNameNotExistException, EventTypeIllegalException
 
@@ -6,7 +8,7 @@ from .model import DailyEvent
 from .schema import DailyEventSchema
 
 from customer.service import CustomerService
-from utils import system_tz
+from utils import system_tz, get_local_today_time_to_utc
 
 class DailyEventService:
     @staticmethod
@@ -55,6 +57,14 @@ class DailyEventService:
     @staticmethod
     async def get_daily_event():
         daily_events = await DailyEvent.find().sort("-create_time").to_list()
+        return daily_events
+
+    @staticmethod
+    async def get_daily_event_today():
+        today = get_local_today_time_to_utc()
+        daily_events = await DailyEvent.find({
+            "estimated_start_time": {"$gte": today, "$lt": today + timedelta(days=1)}
+        }).sort("estimated_start_time").to_list()
         return daily_events
 
     @staticmethod
