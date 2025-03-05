@@ -60,7 +60,7 @@ class LineService:
 
     @staticmethod
     async def get_explaination(event):
-        message = 'daily_event 格式範例： name, event_type, estimated_start_time, estimated_end_time\n'
+        message = '產生 daily_event 格式範例： 建立 name, event_type, estimated_start_time, estimated_end_time\n'
         message += 'event_type: ' + ', '.join([member.value for _, member in DailyEventType.__members__.items()])
         await LineService.reply_message(event, message)
         return
