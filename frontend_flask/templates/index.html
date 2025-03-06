@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Form Submission to Python Backend</title>
+  <script>
+    // 當表單被提交時執行這個函數
+    function submitForm(event) {
+      event.preventDefault();  // 防止表單的默認提交行為
+
+      // 獲取表單中的資料
+      const formData = new FormData(document.getElementById('myForm'));
+
+      // 將表單資料轉換為 JSON 物件
+      const data = {};
+      formData.forEach((value, key) => {
+        data[key] = value;
+      });
+
+      // 使用 Fetch API 將表單資料發送到後端伺服器
+      fetch('http://localhost:5000/submit_form', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),  // 將表單資料轉為 JSON 字串
+      })
+      .then(response => response.json())
+      .then(data => {
+        alert('Form submitted successfully: ' + data.message);
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        alert('Error submitting form');
+      });
+    }
+  </script>
+</head>
+<body>
+
+  <h1>Submit Form to Python Backend</h1>
+
+  <form id="myForm" onsubmit="submitForm(event)">
+    <label for="name">Name:</label>
+    <input type="text" id="name" name="name" required>
+    <br><br>
+
+    <label for="email">Email:</label>
+    <input type="email" id="email" name="email" required>
+    <br><br>
+
+    <label for="message">Message:</label>
+    <textarea id="message" name="message" required></textarea>
+    <br><br>
+
+    <button type="submit">Submit</button>
+  </form>
+
+</body>
+</html>
