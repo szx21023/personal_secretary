@@ -81,7 +81,7 @@ class DailyEventService:
         if daily_event.status != DailyEventStatus.WAITING:
             exception = EventStatusNotWaitingException(daily_event=daily_event)
             app.logger.warning(exception.message)
-            return
+            raise exception
 
         daily_event.status = DailyEventStatus.DELAYED
         await daily_event.save()
