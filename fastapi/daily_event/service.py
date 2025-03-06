@@ -69,10 +69,10 @@ class DailyEventService:
 
     @staticmethod
     async def get_daily_event_waiting_but_delayed():
-        currect_time = get_local_now_time()
+        current_time = get_local_now_time()
         daily_events = await DailyEvent.find({
             "status": DailyEventStatus.WAITING,
-            "estimated_start_time": {"$lt": currect_time}
+            "estimated_start_time": {"$lt": current_time}
         }).sort("estimated_start_time").to_list()
         return daily_events
 
