@@ -30,5 +30,6 @@ class Settings(BaseSettings):
 
     # cron config
     CRON_DAILY_EVENT_EVERYDAY_REMINDING: str = '00 00 * * *'
+    CRON_DAILY_EVENT_DELAY: str = '* * * * *'
 
     model_config = SettingsConfigDict(env_file=".env")
