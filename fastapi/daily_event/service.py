@@ -1,14 +1,14 @@
 from datetime import timedelta
 
 from main import app
-from exception.exception import EstimatedTimeWrongValueException, EventNameNotExistException, EventTypeIllegalException
+from exception.exception import EstimatedTimeWrongValueException, EventNameNotExistException, EventTypeIllegalException, EventStatusNotWaitingException
 
 from .const import DailyEventStatus, DailyEventType
 from .model import DailyEvent
 from .schema import DailyEventSchema
 
 from customer.service import CustomerService
-from utils import system_tz, get_local_today_time_to_utc
+from utils import system_tz, get_local_now_time, get_local_today_time_to_utc
 
 class DailyEventService:
     @staticmethod
@@ -66,6 +66,28 @@ class DailyEventService:
             "estimated_start_time": {"$gte": today, "$lt": today + timedelta(days=1)}
         }).sort("estimated_start_time").to_list()
         return daily_events
+
+    @staticmethod
+    async def get_daily_event_waiting_but_delayed():
+        current_time = get_local_now_time()
+        daily_events = await DailyEvent.find({
+            "status": DailyEventStatus.WAITING,
+            "estimated_start_time": {"$lt": current_time}
+        }).sort("estimated_start_time").to_list()
+        return daily_events
+
+    @staticmethod
+    async def to_delay(daily_event):
+        if daily_event.status != DailyEventStatus.WAITING:
+            exception = EventStatusNotWaitingException(daily_event=daily_event)
+            app.logger.warning(exception.message)
+            raise exception
+
+        daily_event.status = DailyEventStatus.DELAYED
+        await daily_event.save()
+        message = f'daily_event changed to delayed, daily_event: {str(daily_event.id)}'
+        app.logger.warning(message)
+        return daily_event
 
     @staticmethod
     async def setup_schedule_remind(daily_event):

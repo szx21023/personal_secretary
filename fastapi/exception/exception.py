@@ -27,6 +27,16 @@ class EventNameNotExistException(InternalBaseException):
         _message = message or self.message
         super().__init__(status.HTTP_403_FORBIDDEN, self.code, _message, **kwargs)
 
+class EventStatusNotWaitingException(InternalBaseException):
+    code = "event_status_not_waiting"
+    message = "Event_status is not waiting"
+
+    def __init__(self, message: str = None, daily_event = None, **kwargs):
+        _message = message or self.message
+        if daily_event:
+            _message = f"{_message}, daily_event: {str(daily_event.id)}"
+        super().__init__(status.HTTP_403_FORBIDDEN, self.code, _message, **kwargs)
+
 class EventTypeIllegalException(InternalBaseException):
     code = "event_type_illegal"
     message = "Event_type is illegal"
