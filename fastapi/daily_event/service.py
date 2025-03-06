@@ -79,10 +79,14 @@ class DailyEventService:
     @staticmethod
     async def to_delay(daily_event):
         if daily_event.status != DailyEventStatus.WAITING:
+            message = f'daily_event is not waiting, daily_event: {str(daily_event.id)}'
+            app.logger.warning(message)
             return
 
         daily_event.status = DailyEventStatus.DELAYED
         await daily_event.save()
+        message = f'daily_event changed to delayed, daily_event: {str(daily_event.id)}'
+        app.logger.warning(message)
         return daily_event
 
     @staticmethod
