@@ -37,7 +37,7 @@ async def job_daily_event_to_delayed():
 
     print('job_daily_event_everyhour_delay start')
 
-    # 取得今日所有的 daily_event
+    # 取得所有已到預計開始時間，狀態為 waiting 的 daily_event
     daily_events = await DailyEventService.get_daily_event_waiting_but_delayed()
 
     customer_d = {}
