@@ -1,7 +1,7 @@
 from datetime import timedelta
 
 from main import app
-from exception.exception import EstimatedTimeWrongValueException, EventNameNotExistException, EventTypeIllegalException
+from exception.exception import EstimatedTimeWrongValueException, EventNameNotExistException, EventTypeIllegalException, EventStatusNotWaitingException
 
 from .const import DailyEventStatus, DailyEventType
 from .model import DailyEvent
@@ -79,8 +79,8 @@ class DailyEventService:
     @staticmethod
     async def to_delay(daily_event):
         if daily_event.status != DailyEventStatus.WAITING:
-            message = f'daily_event is not waiting, daily_event: {str(daily_event.id)}'
-            app.logger.warning(message)
+            exception = EventStatusNotWaitingException(daily_event=daily_event)
+            app.logger.warning(exception.message)
             return
 
         daily_event.status = DailyEventStatus.DELAYED
