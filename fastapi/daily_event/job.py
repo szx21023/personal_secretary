@@ -1,3 +1,5 @@
+from .const import LINE_MESSAGE_DELAYED
+
 async def job_daily_event_everyday_reminding():
     from customer.service import CustomerService
     from line.service import LineService
@@ -54,7 +56,7 @@ async def job_daily_event_to_delayed():
 
         for daily_event in customer_d[customer_id]:
             daily_event = await DailyEventService.to_delay(daily_event)
-            message = daily_event.event_name
+            message = f'{daily_event.event_name} {LINE_MESSAGE_DELAYED}'
             await LineService.push_message(line_uid, message)
 
     print('job_daily_event_everyhour_delay end')

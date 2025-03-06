@@ -29,3 +29,5 @@ class DailyEventType(Enum):
     WORK = "work"
     EXERCISE = "exercise"
     OTHER = "other"
+
+LINE_MESSAGE_DELAYED = '已延遲'
