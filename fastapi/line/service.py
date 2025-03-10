@@ -16,7 +16,9 @@ class LineService:
     async def handle_message(event):
         params = {'line_uid': event.source.user_id}
         if not (customer := await CustomerService.get_by_line_uid(**params)):
-            customer = await CustomerService.create_customer(params)
+            url = app.state.config.get('MONGODB_SETTINGS').get('FRONTEND_API_URL')
+            await LineService.reply_message(event, url)
+            # customer = await CustomerService.create_customer(params)
 
         if '建立' in event.message.text:
             result = await LineService.create_daily_event(customer, event)
