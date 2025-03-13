@@ -32,4 +32,7 @@ class Settings(BaseSettings):
     CRON_DAILY_EVENT_EVERYDAY_REMINDING: str = '00 00 * * *'
     CRON_DAILY_EVENT_DELAY: str = '*/10 * * * *'
 
+    # external api config
+    FRONTEND_API_URL: str = 'http://127.0.0.1:5000'
+
     model_config = SettingsConfigDict(env_file=".env")
