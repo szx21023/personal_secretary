@@ -19,7 +19,10 @@ async def create_daily_event(schema = Body(example={
     post daily_event api
     """
 
-    customer_id = schema.pop('customer_id')
+    from customer.service import CustomerService
+    customer = await CustomerService.get_by_line_uid('U22280e5e05c960a92aac3a1a4a3e5d6a')
+    customer_id = str(customer.id)
+    # customer_id = schema.pop('customer_id')
     event_name = schema.pop('event_name')
     event_type = schema.pop('event_type')
 
