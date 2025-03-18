@@ -52,3 +52,11 @@ class CustomerNotExistException(InternalBaseException):
     def __init__(self, message: str = None, **kwargs):
         _message = message or self.message
         super().__init__(status.HTTP_404_NOT_FOUND, self.code, _message, **kwargs)
+
+class CustomerCreatedFailException(InternalBaseException):
+    code = "customer_created_fail"
+    message = "customer created fail"
+
+    def __init__(self, message: str = None, **kwargs):
+        _message = message or self.message
+        super().__init__(status.HTTP_403_FORBIDDEN, self.code, _message, **kwargs)
