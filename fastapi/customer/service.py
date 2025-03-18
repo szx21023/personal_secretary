@@ -1,7 +1,7 @@
 from bson import ObjectId
 
 from .model import Customer
-from exception.exception import CustomerNotExistException
+from exception.exception import CustomerNotExistException, CustomerCreatedFailException
 from main import app
 
 class CustomerService:
@@ -31,6 +31,15 @@ class CustomerService:
         return customer
 
     async def create_customer(schema):
-        customer = Customer(**schema)
-        await customer.save()
+        try:
+            customer = Customer(**schema)
+            await customer.save()
+            message = f'Create customer successfully, data: {schema}'
+            app.logger.info(message)
+
+        except Exception as e:
+            exception = CustomerCreatedFailException()
+            app.logger.warning(exception.message)
+            raise exception
+
         return customer
