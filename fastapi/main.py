@@ -14,6 +14,7 @@ from aws import init_app as init_aws_app
 from customer import init_app as init_customer_app
 from daily_event import init_app as init_daily_event_app
 from line import init_app as init_line_app
+from frontend_fastapi import init_app as init_frontend_fastapi_app
 from scheduler import init_app as init_scheduler_app
 from config import Settings
 from database import init_db
@@ -86,7 +87,8 @@ class PSFactory:
             response = await call_next(request)
             response_body = [section async for section in response.body_iterator]
             response.body_iterator = iterate_in_threadpool(iter(response_body))
-            app.logger.info(f"response_body: {response_body[0].decode()}")
+            if response_body:
+                app.logger.info(f"response_body: {response_body[0].decode()}")
             return response
 
         return app
@@ -100,6 +102,7 @@ async def start_db():
     await init_customer_app(app)
     init_daily_event_app(app)
     init_line_app(app)
+    init_frontend_fastapi_app(app)
 
 @app.get("/hello")
 def read_root():

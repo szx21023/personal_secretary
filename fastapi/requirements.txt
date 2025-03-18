@@ -24,6 +24,7 @@ httptools==0.6.1
 httpx==0.26.0
 idna==3.7
 internal==1.0.7
+Jinja2==3.1.5
 jmespath==1.0.1
 lazy-model==0.2.0
 line-bot-sdk==3.11.0

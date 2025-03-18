@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>表單</title>
+</head>
+<body>
+    <h1>請填寫表單</h1>
+    <form id="myForm">
+        <label for="customer_id">用戶編號：</label>
+        <input type="text" id="customer_id" name="customer_id" required><br><br>
+        <label for="event_name">事件名稱：</label>
+        <input type="text" id="event_name" name="event_name" required><br><br>
+        <label for="event_type">事件類型：</label>
+        <input type="text" id="event_type" name="event_type" required><br><br>
+        <label for="description">描述：</label>
+        <input type="text" id="description" name="description"><br><br>
+        <label for="note">備註：</label>
+        <input type="text" id="note" name="note"><br><br>
+        <label for="estimated_start_time">預估開始時間：</label>
+        <input type="datetime-local" id="estimated_start_time" name="estimated_start_time"><br><br>
+        <label for="estimated_end_time">預估結束時間：</label>
+        <input type="datetime-local" id="estimated_end_time" name="estimated_end_time"><br><br>
+        <input type="submit" value="提交">
+    </form>
+
+    <script>
+        // 攔截表單提交事件
+        document.getElementById('myForm').addEventListener('submit', async function(event) {
+            event.preventDefault();  // 防止表單的默認提交行為
+            
+            // 獲取表單中的資料
+            const formData = new FormData(this);
+            
+            // 將資料轉換為 JSON 物件
+            const data = {
+                customer_id: formData.get('customer_id'),
+                event_name: formData.get('event_name'),
+                event_type: formData.get('event_type'),
+                description: formData.get('description'),
+                note: formData.get('note'),
+                estimated_start_time: formData.get('estimated_start_time'),
+                estimated_end_time: formData.get('estimated_end_time')
+            };
+
+            try {
+                // 發送 POST 請求，將資料作為 JSON 傳送
+                const response = await fetch('/daily_event', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data)  // 將資料轉換為 JSON 字串
+                });
+
+                // 解析伺服器回應
+                const result = await response.json();
+                console.log(result); // 可以在控制台查看伺服器回應的結果
+
+                if (response.ok) {
+                    alert('資料已成功提交!');
+                } else {
+                    alert('提交資料時出現錯誤');
+                }
+            } catch (error) {
+                console.error('錯誤:', error);
+                alert('發送請求時發生錯誤');
+            }
+        });
+    </script>
+</body>
+</html>
