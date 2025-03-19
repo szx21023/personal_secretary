@@ -16,7 +16,7 @@ class LineService:
     async def handle_message(event):
         params = {'line_uid': event.source.user_id}
         if not (customer := await CustomerService.get_by_line_uid(**params)):
-            customer = await CustomerService.create_customer(params)
+            customer = await CustomerService.create_customer(**params)
             message = '新用戶建立成功'
             await LineService.reply_message(event, message)
 

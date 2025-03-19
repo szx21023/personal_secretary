@@ -1,2 +1,5 @@
 def init_app(app):
-    pass
+    from .controller import router
+
+    app.include_router(router)
+

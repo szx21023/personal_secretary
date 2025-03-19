@@ -30,11 +30,11 @@ class CustomerService:
 
         return customer
 
-    async def create_customer(schema):
+    async def create_customer(**kwargs):
         try:
-            customer = Customer(**schema)
+            customer = Customer(**kwargs)
             await customer.save()
-            message = f'Create customer successfully, data: {schema}'
+            message = f'Create customer successfully, data: {kwargs}'
             app.logger.info(message)
 
         except Exception as e:
