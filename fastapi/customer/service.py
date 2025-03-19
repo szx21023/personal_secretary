@@ -5,6 +5,7 @@ from exception.exception import CustomerNotExistException, CustomerCreatedFailEx
 from main import app
 
 class CustomerService:
+    @staticmethod
     async def get_by_id(customer_id):
         if not (customer := await Customer.find({"_id": ObjectId(customer_id)}).first_or_none()):
             message = f'no customer, customer_id: {customer_id}'
@@ -13,6 +14,7 @@ class CustomerService:
 
         return customer
 
+    @staticmethod
     async def get_by_line_uid(line_uid):
         if not (customer := await Customer.find({"line_uid": line_uid}).first_or_none()):
             message = f'no customer, line_uid: {line_uid}'
@@ -30,6 +32,7 @@ class CustomerService:
 
         return customer
 
+    @staticmethod
     async def create_customer(**kwargs):
         try:
             customer = Customer(**kwargs)
