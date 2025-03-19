@@ -43,3 +43,8 @@ class CustomerService:
             raise exception
 
         return customer
+
+    @staticmethod
+    async def get_customer():
+        customers = await Customer.find().sort("-create_time").to_list()
+        return customers

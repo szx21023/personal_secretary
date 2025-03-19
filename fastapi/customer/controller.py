@@ -18,3 +18,12 @@ async def create_customer(schema = Body(example={
 
     customer = await CustomerService.create_customer(**schema)
     return return_response(customer)
+
+@router.get("")
+async def get_customer():
+    """
+    get customer api
+    """
+
+    customer = await CustomerService.get_customer()
+    return return_response(customer)
