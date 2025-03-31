@@ -97,7 +97,7 @@ app = PSFactory().create_app()
 async def start_db():
     await init_db()
     await init_scheduler_app(app)
-    init_customer_app(app)
+    await init_customer_app(app)
     init_daily_event_app(app)
     init_line_app(app)
 
