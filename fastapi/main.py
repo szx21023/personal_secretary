@@ -2,13 +2,12 @@ import dotenv
 import os
 import watchtower
 
-from fastapi import FastAPI, HTTPException, status, Request
+from fastapi import FastAPI, HTTPException, Request
 from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 from starlette.concurrency import iterate_in_threadpool
 
 import logging
-import traceback
 
 from aws import init_app as init_aws_app
 from customer import init_app as init_customer_app

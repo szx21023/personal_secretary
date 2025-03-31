@@ -1,9 +1,6 @@
-from datetime import datetime
-from fastapi import APIRouter, Body, Request
+from fastapi import APIRouter, Request
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
-
-from utils import return_response
 
 router = APIRouter(prefix=f"/frontend", tags=["frontend"])
 templates = Jinja2Templates(directory="frontend_fastapi/templates")
