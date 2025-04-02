@@ -1,5 +1,7 @@
 # personal_secretary
 ```
+docker run --name mongodb -d -p 27017:27017 mongo
+cd fastapi
 uvicorn main:app --host 0.0.0.0 --port 8000
 ```
 
