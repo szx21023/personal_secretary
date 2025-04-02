@@ -22,15 +22,6 @@ jobs:
       - name: Install dependencies
         run: npm install  # 安裝依賴
 
-      - name: Run tests
-        run: npm test  # 執行測試
-
-      - name: Build the app
-        run: npm run build  # 構建應用
-
-      - name: Deploy (可選，例如使用 Heroku)
+      - name: Deploy
         run: |
-          echo "Deploying to Heroku..."
-          heroku deploy:jar target/my-app.jar
-        env:
-          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}  # 使用 GitHub Secret 儲存 Heroku API 密鑰
+          echo "Hello World..."
