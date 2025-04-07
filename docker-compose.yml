@@ -45,6 +45,8 @@ services:
     container_name: ${DOCKER_MONGODB_NAME}
     ports:
       - "${DOCKER_MONGODB_PORT}:27017"
+    volumes:
+      - mongo-data:/data/db
     networks:
       - mynet
     environment:
@@ -54,3 +56,6 @@ services:
 
 networks:
   mynet:
+
+volumes:
+  mongo-data:
