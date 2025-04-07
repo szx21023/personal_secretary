@@ -1,7 +1,7 @@
 from datetime import timedelta
 
 from main import app
-from exception.exception import EstimatedTimeWrongValueException, EventNameNotExistException, EventTypeIllegalException, EventStatusNotWaitingException
+from exception.exception import EstimatedTimeWrongValueException, EventNameNotExistException, EventTypeIllegalException, EventStatusNotWaitingException, EventAlreadyExistAtSameTimeException
 
 from .const import DailyEventStatus, DailyEventType
 from .model import DailyEvent
@@ -31,7 +31,7 @@ class DailyEventService:
                 raise exception
 
             if daily_event := await DailyEventService.check_time_overlap(estimated_start_time, estimated_end_time):
-                exception = EstimatedTimeWrongValueException()
+                exception = EventAlreadyExistAtSameTimeException()
                 app.logger.warning(exception.message)
                 raise exception
 
