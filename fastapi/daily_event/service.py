@@ -16,11 +16,24 @@ class DailyEventService:
         customer = await CustomerService.get_customer_by_id(customer_id)
 
         # if nether (both columns exist) nor (both columns not exist), raise error
-        if not ((kargs.get('estimated_start_time') and kargs.get('estimated_end_time')) or \
-        (not kargs.get('estimated_start_time') and not kargs.get('estimated_end_time'))):
+        estimated_start_time = kargs.get('estimated_start_time')
+        estimated_end_time = kargs.get('estimated_end_time')
+        if not ((estimated_start_time and estimated_end_time) or \
+        (not estimated_start_time and not estimated_end_time)):
             exception = EstimatedTimeWrongValueException()
             app.logger.warning(exception.message)
             raise exception
+
+        if estimated_end_time and estimated_start_time:
+            if estimated_end_time < estimated_start_time:
+                exception = EstimatedTimeWrongValueException()
+                app.logger.warning(exception.message)
+                raise exception
+
+            if daily_event := await DailyEventService.check_time_overlap(estimated_start_time, estimated_end_time):
+                exception = EstimatedTimeWrongValueException()
+                app.logger.warning(exception.message)
+                raise exception
 
         if not event_name:
             exception = EventNameNotExistException()
@@ -99,3 +112,18 @@ class DailyEventService:
             job = app.scheduler.add_job(LineService.remind_coming_daily_event, 'date', run_date=run_date, id=job_id, args=[daily_event])
             message = f"setup job_remind_coming_daily_event, job_id: {job_id}, run_date: {run_date}"
             app.logger.info(message)
+
+    @staticmethod
+    async def check_time_overlap(start_time, end_time):
+        # 查詢是否存在時間有交集的資料
+        from datetime import datetime
+        if isinstance(start_time, str):
+            start_time = datetime.strptime(start_time, "%Y-%m-%d %H:%M:%S")
+        if isinstance(end_time, str):
+            end_time = datetime.strptime(end_time, "%Y-%m-%d %H:%M:%S")
+
+        daily_event = await DailyEvent.find({
+            "estimated_start_time": {"$lt": end_time},
+            "estimated_end_time": {"$gt": start_time}
+        }).first_or_none()
+        return daily_event
