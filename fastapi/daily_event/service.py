@@ -15,9 +15,11 @@ class DailyEventService:
     async def create_daily_event(customer_id, event_name, event_type, **kargs):
         customer = await CustomerService.get_customer_by_id(customer_id)
 
+        schema = DailyEventSchema()
+        data = schema.load(kargs)
         # if nether (both columns exist) nor (both columns not exist), raise error
-        estimated_start_time = kargs.get('estimated_start_time')
-        estimated_end_time = kargs.get('estimated_end_time')
+        estimated_start_time = data.get('estimated_start_time')
+        estimated_end_time = data.get('estimated_end_time')
         if not ((estimated_start_time and estimated_end_time) or \
         (not estimated_start_time and not estimated_end_time)):
             exception = EstimatedTimeWrongValueException()
@@ -45,25 +47,24 @@ class DailyEventService:
             app.logger.warning(exception.message)
             raise exception
 
-        if 'start_time' in kargs:
-            kargs['status'] = DailyEventStatus.STARTED
+        if 'start_time' in data:
+            data['status'] = DailyEventStatus.STARTED
 
-        elif 'estimated_start_time' in kargs:
-            kargs['status'] = DailyEventStatus.WAITING
+        elif 'estimated_start_time' in data:
+            data['status'] = DailyEventStatus.WAITING
 
         else:
-            kargs['status'] = DailyEventStatus.IDLE
+            data['status'] = DailyEventStatus.IDLE
 
-        kargs.update({
+        data.update({
             'customer_id': customer_id,
             'event_name': event_name,
             'event_type': event_type
         })
-        daily_event = DailyEvent(**kargs)
+        daily_event = DailyEvent(**data)
         await daily_event.save()
 
         await DailyEventService.setup_schedule_remind(daily_event)
-        schema = DailyEventSchema()
         daily_event = schema.dump(daily_event)
         return daily_event
 
@@ -116,12 +117,6 @@ class DailyEventService:
     @staticmethod
     async def check_time_overlap(start_time, end_time):
         # 查詢是否存在時間有交集的資料
-        from datetime import datetime
-        if isinstance(start_time, str):
-            start_time = datetime.strptime(start_time, "%Y-%m-%d %H:%M:%S")
-        if isinstance(end_time, str):
-            end_time = datetime.strptime(end_time, "%Y-%m-%d %H:%M:%S")
-
         daily_event = await DailyEvent.find({
             "estimated_start_time": {"$lt": end_time},
             "estimated_end_time": {"$gt": start_time}
