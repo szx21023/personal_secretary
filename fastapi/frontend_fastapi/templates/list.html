@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>報表顯示</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        table, th, td {
+            border: 1px solid black;
+        }
+        th, td {
+            padding: 8px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>報表資料</h1>
+    <table id="report-table">
+        <thead>
+            <tr>
+                <th>用戶編號</th>
+                <th>事件名稱</th>
+                <th>事件類型</th>
+                <th>狀態</th>
+                <th>描述</th>
+                <th>備註</th>
+                <th>預估開始時間</th>
+                <th>預估結束時間</th>
+                <th>開始時間</th>
+                <th>結束時間</th>
+                <th>取消時間</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- 資料將顯示在這裡 -->
+        </tbody>
+    </table>
+
+    <script>
+        // 假設這是我們的 API URL
+        const apiUrl = '/daily_event'; // 用實際 API 端點替換
+
+        // 當頁面載入完成後執行抓取資料並顯示的函式
+        window.onload = function() {
+            fetch(apiUrl)
+                .then(response => response.json())  // 解析 JSON 格式的回應資料
+                .then(data => {
+                    // 假設 data 是一個包含報表資料的陣列
+                    const tableBody = document.querySelector("#report-table tbody");
+
+                    // 將資料渲染到表格中
+                    data.data.page_data.forEach(item => {
+                        const row = document.createElement("tr");
+
+                        // 創建每一行的單元格並填充數據
+                        const idCell = document.createElement("td");
+                        idCell.textContent = item.customer_id;
+                        row.appendChild(idCell);
+
+                        const eventNameCell = document.createElement("td");
+                        eventNameCell.textContent = item.event_name;
+                        row.appendChild(eventNameCell);
+
+                        const eventTypeCell = document.createElement("td");
+                        eventTypeCell.textContent = item.event_type;
+                        row.appendChild(eventTypeCell);
+
+                        const statusCell = document.createElement("td");
+                        statusCell.textContent = item.status;
+                        row.appendChild(statusCell);
+
+                        const descriptionCell = document.createElement("td");
+                        descriptionCell.textContent = item.description;
+                        row.appendChild(descriptionCell);
+
+                        const noteCell = document.createElement("td");
+                        noteCell.textContent = item.note;
+                        row.appendChild(noteCell);
+
+                        const estimatedStartCell = document.createElement("td");
+                        estimatedStartCell.textContent = item.estimated_start_time;
+                        row.appendChild(estimatedStartCell);
+
+                        const estimatedEndCell = document.createElement("td");
+                        estimatedEndCell.textContent = item.estimated_end_time;
+                        row.appendChild(estimatedEndCell);
+
+                        const startTimeCell = document.createElement("td");
+                        startTimeCell.textContent = item.start_time;
+                        row.appendChild(startTimeCell);
+
+                        const endTimeCell = document.createElement("td");
+                        endTimeCell.textContent = item.end_time;
+                        row.appendChild(endTimeCell);
+
+                        const cancelTimeCell = document.createElement("td");
+                        cancelTimeCell.textContent = item.cancel_time;
+                        row.appendChild(cancelTimeCell);
+
+                        // 將行加入表格的tbody中
+                        tableBody.appendChild(row);
+                    });
+                })
+                .catch(error => {
+                    console.error("抓取資料時出錯:", error);
+                });
+        };
+    </script>
+
+</body>
+</html>
