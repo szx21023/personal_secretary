@@ -45,6 +45,14 @@ class EventTypeIllegalException(InternalBaseException):
         _message = message or self.message
         super().__init__(status.HTTP_403_FORBIDDEN, self.code, _message, **kwargs)
 
+class EventAlreadyExistAtSameTimeException(InternalBaseException):
+    code = "event_already_exist_at_same_time"
+    message = "Event already exist at same time"
+
+    def __init__(self, message: str = None, **kwargs):
+        _message = message or self.message
+        super().__init__(status.HTTP_403_FORBIDDEN, self.code, _message, **kwargs)
+
 class CustomerNotExistException(InternalBaseException):
     code = "customer_not_exist"
     message = "customer not exist"
