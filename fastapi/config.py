@@ -1,6 +1,7 @@
-from pydantic_settings import BaseSettings, SettingsConfigDict
+from fastapi_basic.base_config import BaseConfig
+from pydantic_settings import SettingsConfigDict
 
-class Settings(BaseSettings):
+class Settings(BaseConfig):
     # db config
     MONGODB_SETTINGS: dict = {
         "host": "127.0.0.1",
