@@ -19,7 +19,7 @@ class PSFactory(BaseFactory):
 
         return app
 
-app = PSFactory().create_app()
+app = PSFactory().create_the_app()
 
 @app.on_event("startup")
 async def start_db():
