@@ -16,14 +16,13 @@ class PSFactory(BaseFactory):
 
     def create_the_app(self):
         app = self.create_app()
-
         return app
 
 app = PSFactory().create_the_app()
 
 @app.on_event("startup")
 async def start_db():
-    await init_db()
+    await init_db(app)
     await init_scheduler_app(app)
     await init_customer_app(app)
     init_daily_event_app(app)
