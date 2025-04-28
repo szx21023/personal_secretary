@@ -16,23 +16,24 @@ class PSFactory(BaseFactory):
 
     def create_the_app(self):
         app = self.create_app()
+
+        @app.on_event("startup")
+        async def start_db():
+            await init_db(app)
+            await init_scheduler_app(app)
+            await init_customer_app(app)
+            init_daily_event_app(app)
+            init_line_app(app)
+            init_frontend_fastapi_app(app)
+
+        @app.get("/hello")
+        def read_root():
+            return {
+                'data': {
+                    'version': version
+                }
+            }
+
         return app
 
 app = PSFactory().create_the_app()
-
-@app.on_event("startup")
-async def start_db():
-    await init_db(app)
-    await init_scheduler_app(app)
-    await init_customer_app(app)
-    init_daily_event_app(app)
-    init_line_app(app)
-    init_frontend_fastapi_app(app)
-
-@app.get("/hello")
-def read_root():
-    return {
-        'data': {
-            'version': version
-        }
-    }
