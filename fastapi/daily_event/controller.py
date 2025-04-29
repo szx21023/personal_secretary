@@ -1,5 +1,4 @@
-from datetime import datetime
-from fastapi import APIRouter, Body, Request
+from fastapi import APIRouter, Body
 
 from utils import return_response
 

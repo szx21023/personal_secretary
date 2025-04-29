@@ -1,11 +1,11 @@
 from fastapi_basic.base_factory import BaseFactory
 
+from config import Settings
 from customer import init_app as init_customer_app
 from daily_event import init_app as init_daily_event_app
-from line import init_app as init_line_app
 from frontend_fastapi import init_app as init_frontend_fastapi_app
+from line import init_app as init_line_app
 from scheduler import init_app as init_scheduler_app
-from config import Settings
 from database import init_db
 from version import version
 
