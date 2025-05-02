@@ -30,7 +30,7 @@ class LineService:
             result = await LineService.get_explaination(event)
 
         else:
-            await LineService.reply_message(event, event.message.text)
+            await app.state.line_bot.reply_message(event, event.message.text)
 
     @staticmethod
     async def create_daily_event(customer, event):
@@ -42,7 +42,7 @@ class LineService:
         daily_event = await DailyEventService.create_daily_event(str(customer.id), event_name, event_type, estimated_start_time=estimated_start_time, estimated_end_time=estimated_end_time)
 
         message = '建立成功'
-        await LineService.reply_message(event, message)
+        await app.state.line_bot.reply_message(event, message)
         return daily_event
 
     @staticmethod
@@ -57,40 +57,18 @@ class LineService:
             message_list.append(template.message)
 
         message = '\n'.join(message_list) if message_list else DEFAULT_NO_DAILY_EVENT_MESSAGE
-        await LineService.reply_message(event, message)
+        await app.state.line_bot.reply_message(event, message)
         return daily_events
 
     @staticmethod
     async def get_explaination(event):
         message = '產生 daily_event 格式範例： 建立 name, event_type, estimated_start_time, estimated_end_time\n'
         message += 'event_type: ' + ', '.join([member.value for _, member in DailyEventType.__members__.items()])
-        await LineService.reply_message(event, message)
+        await app.state.line_bot.reply_message(event, message)
         return
-
-    @staticmethod
-    async def reply_message(event, message):
-        try:
-            app.state.line_bot_api.reply_message(
-                event.reply_token,
-                TextMessage(text=message)
-            )
-        except LineBotApiError as err:
-            app.logger.warning(str(err))
-
-        return
-
-    @staticmethod
-    async def push_message(line_uid: str, text: str):
-        try:
-            app.state.line_bot_api.push_message(line_uid, TextSendMessage(text=text))
-            message = f"Send line message successful, line_uid: {line_uid}, text: {text}"
-            app.logger.info(message)
-        except LineBotApiError as err:
-            message = f"Send line message fail, line_uid: {line_uid}, text: {text}, err: {str(err)}"
-            app.logger.warning(message)
 
     @staticmethod
     async def remind_coming_daily_event(daily_event):
         customer = await CustomerService.get_customer_by_id(daily_event.customer_id)
         message = f'{daily_event.event_name} is coming'
-        await LineService.push_message(customer.line_uid, message)
+        await app.state.line_bot.push_message(customer.line_uid, message)
