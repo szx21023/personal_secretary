@@ -1,6 +1,7 @@
 import asyncio
 
-from linebot import LineBotApi, WebhookHandler
+from fastapi_basic.ext.line import LineBot
+
 from linebot.models import MessageEvent, TextMessage
 
 def init_app(app):
@@ -9,10 +10,10 @@ def init_app(app):
 
     app.include_router(router)
 
-    app.state.line_bot_api = LineBotApi(app.state.config.get('LINE_CHANNEL_ACCESS_TOKEN'))
-    app.state.line_handler = WebhookHandler(app.state.config.get('LINE_CHANNEL_SECRET'))
+    line_bot = LineBot(app.state.config.get('LINE_CHANNEL_ACCESS_TOKEN'), app.state.config.get('LINE_CHANNEL_SECRET'))
+    app.state.line_bot = line_bot
 
-    @app.state.line_handler.add(MessageEvent, message=TextMessage)
+    @app.state.line_bot.handler.add(MessageEvent, message=TextMessage)
     def handle_message(event: MessageEvent):
         message = f'line_event: {event}'
         app.logger.info(message)

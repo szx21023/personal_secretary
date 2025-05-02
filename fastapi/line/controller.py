@@ -12,7 +12,7 @@ async def callback(request: Request):
     body = await request.body()
     signature = request.headers['x-line-signature']
     try:
-        app.state.line_handler.handle(body.decode("utf-8"), signature)
+        app.state.line_bot.handler.handle(body.decode("utf-8"), signature)
     
     except InvalidSignatureError:
         raise HTTPException(status_code=400, detail="chatbot handle body error.")
