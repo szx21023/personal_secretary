@@ -64,7 +64,7 @@ class DailyEventService:
         daily_event = DailyEvent(**data)
         await daily_event.save()
 
-        await DailyEventService.setup_schedule_remind(daily_event)
+        # await DailyEventService.setup_schedule_remind(daily_event)
         daily_event = schema.dump(daily_event)
         return daily_event
 
@@ -103,16 +103,16 @@ class DailyEventService:
         app.logger.warning(message)
         return daily_event
 
-    @staticmethod
-    async def setup_schedule_remind(daily_event):
-        from line.service import LineService
+    # @staticmethod
+    # async def setup_schedule_remind(daily_event):
+    #     from line.service import LineService
 
-        if daily_event.status == DailyEventStatus.WAITING:
-            job_id = f'job_remind_coming_daily_event_{str(daily_event.id)}'
-            run_date = daily_event.estimated_start_time.replace(tzinfo=system_tz())
-            job = app.scheduler.add_job(LineService.remind_coming_daily_event, 'date', run_date=run_date, id=job_id, args=[daily_event])
-            message = f"setup job_remind_coming_daily_event, job_id: {job_id}, run_date: {run_date}"
-            app.logger.info(message)
+    #     if daily_event.status == DailyEventStatus.WAITING:
+    #         job_id = f'job_remind_coming_daily_event_{str(daily_event.id)}'
+    #         run_date = daily_event.estimated_start_time.replace(tzinfo=system_tz())
+    #         job = app.scheduler.add_job(LineService.remind_coming_daily_event, 'date', run_date=run_date, id=job_id, args=[daily_event])
+    #         message = f"setup job_remind_coming_daily_event, job_id: {job_id}, run_date: {run_date}"
+    #         app.logger.info(message)
 
     @staticmethod
     async def check_time_overlap(start_time, end_time):
